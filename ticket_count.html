@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>How Many Seats?</title>
+<style>
+  body { background: #111; color: white; text-align: center; font-family: Arial; }
+  .box { background: #222; padding: 40px; width: 400px; margin: 50px auto; border-radius: 10px; }
+  
+  .seat-btn { 
+    background: #333; color: white; border: none; padding: 15px 25px; 
+    margin: 5px; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold;
+  }
+  .seat-btn:hover { background: #555; }
+  .seat-btn.active { background: red; }
+  
+  button.next-btn { 
+    background: red; color: white; padding: 15px 30px; border: none; 
+    cursor: pointer; font-size: 16px; border-radius: 5px; font-weight: bold; 
+    width: 100%; margin-top: 30px;
+  }
+  button.next-btn:hover { background: darkred; }
+</style>
+</head>
+<body>
+
+  <div class="box">
+    <h2 id="movie-title">Movie</h2>
+    <p style="color: #aaa; margin-bottom: 20px;">How many tickets would you like to book?</p>
+    
+    <div id="seat-buttons">
+      <button class="seat-btn" onclick="pickSeats(1, this)">1</button>
+      <button class="seat-btn" onclick="pickSeats(2, this)">2</button>
+      <button class="seat-btn" onclick="pickSeats(3, this)">3</button>
+      <button class="seat-btn" onclick="pickSeats(4, this)">4</button>
+      <button class="seat-btn" onclick="pickSeats(5, this)">5</button>
+    </div>
+
+    <button class="next-btn" onclick="goNext()">Choose Theatre & Time</button>
+  </div>
+
+  <script>
+    const movie = localStorage.getItem('movie') || "Movie";
+    document.getElementById('movie-title').innerText = "Tickets for: " + movie;
+    
+    let selectedCount = 0;
+
+    function pickSeats(count, btnElement) {
+      selectedCount = count;
+      
+      let buttons = document.getElementsByClassName('seat-btn');
+      for(let i=0; i<buttons.length; i++){
+        buttons[i].classList.remove('active');
+      }
+      
+      btnElement.classList.add('active');
+    }
+
+    function goNext() {
+      if(selectedCount === 0) {
+        alert("Please pick how many seats you want!");
+        return;
+      }
+      
+      localStorage.setItem('ticketCount', selectedCount);
+      window.location.href = 'theatre.html';
+    }
+  </script>
+
+</body>
+</html>

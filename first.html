@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CineVerse</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+body{
+    background:#0b0b0b;
+    color:white;
+}
+nav{
+    display:flex;
+    justify-content:space-between;
+    padding:20px 50px;
+    background:rgba(0,0,0,0.6);
+    position:fixed;
+    width:100%;
+}
+nav h1{
+    color:#ff3c3c;
+}
+nav button{
+    padding:8px 18px;
+    border:none;
+    background:#ff3c3c;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+.hero{
+    height:100vh;
+    background: url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4') no-repeat center/cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.hero h2{
+    font-size:50px;
+}
+.hero p{
+    margin:15px 0;
+    font-size:18px;
+    color:#ccc;
+}
+.hero button{
+    padding:12px 25px;
+    background:#ff3c3c;
+    border:none;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    border-radius:5px;
+}
+.movies{
+    padding:50px;
+}
+.movies h2{
+    margin-bottom:20px;
+}
+.movie-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1a1a1a;
+    border-radius:10px;
+    overflow:hidden;
+    transition:0.3s;
+}
+.card img{
+    width:100%;
+    aspect-ratio: 2 / 3;
+    object-fit:contain;
+    background:#000;
+}
+.card:hover{
+    transform:scale(1.05);
+}
+.card h3{
+    padding:10px;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    background:#111;
+    color:#777;
+}
+.brand{
+    font-size:80px;
+    font-weight:900;
+    letter-spacing:3px;
+    margin-bottom:10px;
+    background-size:200%;
+    color: #ff3c3c;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <h1>CineVerse</h1>
+    <button onclick="goToLogin()">Login</button>
+</nav>
+
+<section class="hero">
+    <div>
+        <h1 class="brand">CineVerse</h1>
+        <h2>Experience Movies Like Never Before 🎬</h2>
+        <p>Book tickets for the latest movies anytime, anywhere</p>
+        <button onclick="goToLogin()">Book Now</button>
+    </div>
+</section>
+
+<section class="movies">
+    <h2>Trending Movies</h2>
+    <div class="movie-grid">
+
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Michael_%282026_film_poster%29.png/250px-Michael_%282026_film_poster%29.png">
+        </div>
+
+        <div class="card">
+            <img src="https://m.media-amazon.com/images/M/MV5BZmM3ZDU3ODItZmY5Yi00OTQ2LWE5OTctZTA5NDBhMWJkOGY3XkEyXkFqcGc@._V1_.jpg">
+        </div>
+
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/en/c/ce/Dhurandhar_poster.jpg">
+        </div>
+
+        <div class="card">
+            <img src="https://m.media-amazon.com/images/M/MV5BOTc3NzAxMjg4M15BMl5BanBnXkFtZTcwMDc2ODQwNw@@._V1_.jpg">
+        </div>
+
+    </div>
+</section>
+<footer>
+    <p>© 2026 CineVerse | All Rights Reserved</p>
+</footer>
+
+<script>
+function goToLogin(){
+    alert("Redirecting to Login Page...");
+     window.location.href = "login.html";
+}
+</script>
+</body>
+</html>

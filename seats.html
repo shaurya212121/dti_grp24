@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Seats</title>
+<style>
+  body { background: #111; color: white; text-align: center; font-family: Arial; }
+  .section { margin: 20px; }
+  
+  .seat {
+    width: 40px; height: 40px; margin: 5px;
+    display: inline-block; cursor: pointer; border-radius: 5px;
+  }
+  
+  .premium { background: gold; }
+  .recliner { background: purple; }
+  .sofa { background: orange; }
+  .selected { background: green !important; }
+       
+  button.pay-btn {
+    padding: 10px 20px; background: red; color: white;
+    border: none; cursor: pointer; font-size: 16px; border-radius: 5px; margin-bottom: 50px;
+  }
+  button.pay-btn:hover { background: darkred; }
+  
+  .screen-container { margin: 30px 0; }
+  .screen {
+    width: 60%; height: 40px; background: #ccc; margin: 0 auto;
+    border-radius: 50%/100%; transform: rotateX(50deg);
+    box-shadow: 0 10px 20px rgba(255,255,255,0.5);
+  }
+  .screen-container p { margin-top: 10px; font-size: 14px; color: #aaa; }
+</style>
+</head>
+<body>
+
+  <h1>Select Exact Seats</h1>
+  <h3 id="info"></h3>
+
+  <div class="screen-container">
+    <div class="screen"></div>
+    <p>SCREEN THIS WAY</p>
+  </div>
+
+  <div class="section">
+    <h2>Premium (₹400)</h2>
+    <div id="premium-seats"></div>
+  </div>
+
+  <div class="section">
+    <h2>Recliner (₹600)</h2>
+    <div id="recliner-seats"></div>
+  </div>
+
+  <div class="section">
+    <h2>Sofa (₹800)</h2>
+    <div id="sofa-seats"></div>
+  </div>
+
+  <br><br>
+  <button class="pay-btn" onclick="pay()">Proceed to Checkout</button>
+
+  <script>
+    const movie = localStorage.getItem('movie') || "Movie";
+    const theatre = localStorage.getItem('theatre') || "Theatre";
+    const time = localStorage.getItem('time') || "Time";
+    const plan = localStorage.getItem('plan') || "Basic";
+    
+    // Get the limit they set on the previous page
+    const maxAllowedSeats = parseInt(localStorage.getItem('ticketCount')) || 1;
+
+    document.getElementById('info').innerText = movie + " | " + theatre + " - " + time + " | Need to pick " + maxAllowedSeats + " seat(s)";
+
+    function createSeats(containerId, rows, cols, type){
+      const container = document.getElementById(containerId);
+
+      for(let i=0; i<rows; i++){
+        for(let j=0; j<cols; j++){
+          let seat = document.createElement('div');
+          seat.classList.add('seat', type);
+
+          seat.onclick = function(){
+            // If it's already green, let them unselect it
+            if(seat.classList.contains('selected')) {
+               seat.classList.remove('selected');
+            } else {
+               // Prevent selecting more than they asked for
+               const currentlySelected = document.querySelectorAll('.selected').length;
+               if(currentlySelected >= maxAllowedSeats) {
+                 alert("You only chose to book " + maxAllowedSeats + " ticket(s). Unselect a seat first to change your choice.");
+               } else {
+                 seat.classList.add('selected');
+               }
+            }
+          }
+
+          container.appendChild(seat);
+        }
+        container.appendChild(document.createElement('br'));
+      }
+    }
+
+    if(theatre === 'PVR'){
+      createSeats('premium-seats', 2, 8, 'premium');
+      createSeats('recliner-seats', 2, 6, 'recliner');
+      createSeats('sofa-seats', 1, 4, 'sofa');
+    }
+    else if(theatre === 'INOX'){
+      createSeats('premium-seats', 3, 6, 'premium');
+      createSeats('recliner-seats', 2, 5, 'recliner');
+      createSeats('sofa-seats', 1, 3, 'sofa');
+    }
+    else{
+      createSeats('premium-seats', 2, 10, 'premium');
+      createSeats('recliner-seats', 2, 6, 'recliner');
+      createSeats('sofa-seats', 1, 5, 'sofa');
+    }
+
+    function pay(){
+      const selectedSeats = document.querySelectorAll('.selected').length;
+      
+      if(selectedSeats < maxAllowedSeats) {
+        alert("Please pick exactly " + maxAllowedSeats + " seats before proceeding!");
+        return;
+      }
+      
+      // Calculate real total based on the colors they clicked
+      let total = 0;
+      const selectedElements = document.querySelectorAll('.selected');
+      selectedElements.forEach(s => {
+        if(s.classList.contains('premium')) total += 400;
+        if(s.classList.contains('recliner')) total += 600;
+        if(s.classList.contains('sofa')) total += 800;
+      });
+
+      // Apply the Premium Discount logic
+      if (plan === 'Premium') {
+        let discount = total * 0.10; // 10% off
+        let finalTotal = total - discount;
+        alert("Proceeding to payment...\n\nOriginal Price: ₹" + total + "\nPremium Discount (10%): -₹" + discount + "\nFinal Total: ₹" + finalTotal + "\n\nEnjoy your free popcorn!");
+      } else {
+        alert("Proceeding to payment...\n\nFinal Total: ₹" + total);
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+  body { background: #111; color: white; text-align: center; font-family: Arial; margin-top: 100px; }
+  .login-box { background: #222; padding: 30px; width: 300px; margin: 0 auto; border-radius: 10px; }
+  input, select { width: 90%; margin: 10px 0; padding: 12px; border-radius: 5px; border: 1px solid #444; background: #333; color: white; }
+  button { width: 95%; margin: 10px 0; padding: 12px; border-radius: 5px; background: red; color: white; cursor: pointer; font-weight: bold; font-size: 16px; border: none; }
+  button:hover { background: darkred; }
+  .switch-page { margin-top: 15px; font-size: 14px; color: #aaa; }
+  .switch-page a { color: red; text-decoration: none; font-weight: bold; }
+  .switch-page a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter Username">
+    <input type="password" id="password" placeholder="Enter Password">
+    
+    <p style="text-align: left; margin-left: 5%; font-size: 14px; margin-bottom: 5px;">Select a Plan:</p>
+    <select id="plan" onchange="updateFeatures()">
+      <option value="Basic">Basic Plan</option>
+      <option value="Premium">Premium Plan</option>
+    </select>
+
+    <div id="feature-list" style="text-align: left; margin-left: 5%; font-size: 13px; color: #ccc; margin-bottom: 15px; min-height: 40px;">
+      - Standard Ticket Pricing<br>
+      - Regular Booking Support
+    </div>
+
+    <button onclick="login()">Continue</button>
+
+    <div class="switch-page">
+      Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script>
+    function updateFeatures() {
+      const plan = document.getElementById('plan').value;
+      const features = document.getElementById('feature-list');
+      
+      if(plan === 'Premium') {
+        features.innerHTML = "⭐ 10% Discount on all tickets<br>🍿 Free Popcorn Voucher at counter";
+        features.style.color = "gold";
+      } else {
+        features.innerHTML = "- Standard Ticket Pricing<br>- Regular Booking Support";
+        features.style.color = "#ccc";
+      }
+    }
+
+    function login() {
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const plan = document.getElementById('plan').value;
+
+      if (user.trim() === "" || pass.trim() === "") { 
+        alert("Please enter both username and password!"); 
+        return; 
+      }
+
+      const registeredUser = localStorage.getItem('registeredUser');
+      const registeredPass = localStorage.getItem('registeredPass');
+
+      if (registeredUser && registeredPass) {
+        if (user !== registeredUser || pass !== registeredPass) {
+          alert("Incorrect username or password!");
+          return;
+        }
+      }
+      localStorage.setItem('username', user);
+      localStorage.setItem('plan', plan);
+      window.location.href = 'movies.html'; 
+    }
+  </script>
+
+</body>
+</html>

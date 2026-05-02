@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Create Account</title>
+<style>
+  body { background: #111; color: white; text-align: center; font-family: Arial; margin-top: 100px; }
+  .login-box { background: #222; padding: 30px; width: 300px; margin: 0 auto; border-radius: 10px; }
+  input { width: 90%; margin: 10px 0; padding: 12px; border-radius: 5px; border: 1px solid #444; background: #333; color: white; }
+  button { width: 95%; margin: 15px 0 10px; padding: 12px; border-radius: 5px; background: red; color: white; cursor: pointer; font-weight: bold; font-size: 16px; border: none; }
+  button:hover { background: darkred; }
+  .switch-page { margin-top: 15px; font-size: 14px; color: #aaa; }
+  .switch-page a { color: red; text-decoration: none; font-weight: bold; }
+  .switch-page a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Create Account</h2>
+    
+    <input type="text" id="new-username" placeholder="Choose a Username">
+    <input type="password" id="new-password" placeholder="Create Password">
+    <input type="password" id="confirm-password" placeholder="Confirm Password">
+
+    <button onclick="createAccount()">Sign Up</button>
+
+    <div class="switch-page">
+      Already have an account? <a href="login.html">Login here</a>
+    </div>
+  </div>
+
+  <script>
+    function createAccount() {
+      const user = document.getElementById('new-username').value;
+      const pass = document.getElementById('new-password').value;
+      const confirmPass = document.getElementById('confirm-password').value;
+
+      // Check if any field is empty
+      if (user.trim() === "" || pass.trim() === "") { 
+        alert("Please fill in all fields!"); 
+        return; 
+      }
+
+      // Check if passwords match
+      if (pass !== confirmPass) {
+        alert("Passwords do not match. Please try again.");
+        return;
+      }
+
+      // Save the registered account details to browser memory
+      localStorage.setItem('registeredUser', user);
+      localStorage.setItem('registeredPass', pass);
+
+      alert("Account created successfully! You can now log in.");
+      window.location.href = 'login.html'; // Send them to the login page
+    }
+  </script>
+
+</body>
+</html>

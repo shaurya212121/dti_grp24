@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Movie</title>
+<style>
+  body { background: #111; color: white; text-align: center; font-family: Arial; }
+  
+  .header-info { text-align: right; margin: 10px 20px; font-size: 14px; color: #aaa; }
+  
+  /* Simple Dropdown */
+  .filters { margin: 20px 0; }
+  select { padding: 10px; border-radius: 5px; background: #333; color: white; border: 1px solid #444; font-size: 16px; cursor: pointer; }
+
+  /* Container to hold all movies side-by-side */
+  #movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* Simple Movie Card */
+  .movie { 
+    width: 180px; 
+    margin: 15px; 
+    padding: 10px; 
+    background: #222; 
+    border-radius: 10px; 
+    cursor: pointer; 
+  }
+  .movie:hover { background: #333; }
+  .movie img { width: 100%; height: 260px; object-fit: cover; border-radius: 5px; }
+  .movie p { margin: 10px 0 5px; font-weight: bold; }
+  
+  .genre-tag { font-size: 12px; color: #aaa; background: #111; padding: 4px 8px; border-radius: 5px; display: inline-block; }
+</style>
+</head>
+<body>
+
+  <div class="header-info" id="user-display"></div>
+  
+  <h1>Select Movie</h1>
+
+  <!-- Genre Filter -->
+  <div class="filters">
+    <label style="font-size: 16px; font-weight: bold; margin-right: 10px;">Filter by Genre:</label>
+    <select id="genreFilter" onchange="displayMovies()">
+      <option value="All">All Movies</option>
+      <option value="Action">Action</option>
+      <option value="Sci-Fi">Sci-Fi</option>
+      <option value="Drama">Drama</option>
+      <option value="Comedy">Comedy</option>
+      <option value="Horror">Horror</option>
+      <option value="Biopic">Biopic</option>
+    </select>
+  </div>
+
+  <!-- This empty div is where the Javascript puts the movies -->
+  <div id="movie-container"></div>
+
+  <script>
+    // 1. Show user info at the top
+    const user = localStorage.getItem('username') || "Guest";
+    const plan = localStorage.getItem('plan') || "Basic";
+    document.getElementById('user-display').innerText = "Logged in as: " + user + " (" + plan + " Plan)";
+
+    // 2. The Movie Database with updated hits!
+    const movies = [
+      { title: "Dhurandhar", genre: "Comedy", img: "https://upload.wikimedia.org/wikipedia/en/c/ce/Dhurandhar_poster.jpg" },
+      { title: "Michael", genre: "Biopic", img: "https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Michael_%282026_film_poster%29.png/250px-Michael_%282026_film_poster%29.png" },
+      { title: "The Devil Wears Prada 2", genre: "Drama", img: "https://m.media-amazon.com/images/M/MV5BZmM3ZDU3ODItZmY5Yi00OTQ2LWE5OTctZTA5NDBhMWJkOGY3XkEyXkFqcGc@._V1_.jpg" },
+      { title: "Kalki 2898 AD", genre: "Sci-Fi", img: "https://miro.medium.com/1*hb9nFJ8CLhdADfjCV4FRRg.jpeg" },
+      { title: "Stree 2", genre: "Horror", img: "https://upload.wikimedia.org/wikipedia/en/a/a1/Stree_2.jpg" },
+      { title: "Rockstar", genre: "Drama", img: "https://m.media-amazon.com/images/M/MV5BOTc3NzAxMjg4M15BMl5BanBnXkFtZTcwMDc2ODQwNw@@._V1_.jpg" },
+      { title: "Jawan", genre: "Action", img: "https://upload.wikimedia.org/wikipedia/en/3/39/Jawan_film_poster.jpg" },
+      { title: "Pathaan", genre: "Action", img: "https://upload.wikimedia.org/wikipedia/en/c/c3/Pathaan_film_poster.jpg" },
+      { title: "Oppenheimer", genre: "Biopic", img: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/Oppenheimer_%28film%29.jpg/250px-Oppenheimer_%28film%29.jpg" },
+      { title: "12th Fail", genre: "Biopic", img: "https://upload.wikimedia.org/wikipedia/en/f/f2/12th_Fail_poster.jpeg" },
+      { title: "Shaitaan", genre: "Horror", img: "https://upload.wikimedia.org/wikipedia/en/f/f0/Shaitaan_2024_film_theatrical_poster.jpeg" },
+      { title: "Dune: Part Two", genre: "Sci-Fi", img: "https://upload.wikimedia.org/wikipedia/en/5/52/Dune_Part_Two_poster.jpeg" },
+      { title: "Animal", genre: "Action", img: "https://upload.wikimedia.org/wikipedia/en/9/90/Animal_%282023_film%29_poster.jpg" },
+      { title: "RRR", genre: "Action", img: "https://upload.wikimedia.org/wikipedia/en/d/d7/RRR_Poster.jpg" },
+      { title: "Inside Out 2", genre: "Comedy", img: "https://upload.wikimedia.org/wikipedia/en/f/f7/Inside_Out_2_poster.jpg" },
+      { title: "Welcome", genre: "Comedy", img: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Welcome_poster_2007.jpg/250px-Welcome_poster_2007.jpg" },
+      { title: "Spider-Man: Spider-Verse", genre: "Action", img: "https://resizing.flixster.com/_l50Ahm00b-RO9Ao2s3AyMjUWiU=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2ExYTZmMWFkLWViZWItNDNhMS1iZTEwLTcxODk1YTk3NWFhMy53ZWJw" },
+      { title: "Interstellar", genre: "Sci-Fi", img: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" },
+      { title: "3 Idiots", genre: "Comedy", img: "https://upload.wikimedia.org/wikipedia/en/d/df/3_idiots_poster.jpg" },
+      { title: "The Dark Knight", genre: "Action", img: "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg" }
+    ];
+
+    // 3. Function to put the movies on the screen
+    function displayMovies() {
+      const container = document.getElementById('movie-container');
+      const selectedGenre = document.getElementById('genreFilter').value;
+      
+      container.innerHTML = ""; // Clear the screen first
+
+      for (let i = 0; i < movies.length; i++) {
+        let movie = movies[i];
+        
+        // Check if it matches the dropdown filter
+        if (selectedGenre === "All" || movie.genre === selectedGenre) {
+          
+          let movieHTML = `
+            <div class="movie" onclick="selectMovie('${movie.title}')">
+              <img src="${movie.img}" alt="${movie.title}">
+              <p>${movie.title}</p>
+              <span class="genre-tag">${movie.genre}</span>
+            </div>
+          `;
+          
+          container.innerHTML += movieHTML;
+        }
+      }
+    }
+
+    // Run the function as soon as the page loads
+    displayMovies();
+
+    // 4. Save the choice and move to the ticket count page
+    function selectMovie(movieName){
+      localStorage.setItem('movie', movieName);
+      window.location.href = 'ticket-count.html'; 
+    }
+  </script>
+
+</body>
+</html>

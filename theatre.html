@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Theatre</title>
+<style>
+  body { background: #111; color: white; text-align: center; font-family: Arial; }
+  .theatre { margin: 20px auto; padding: 20px; background: #222; width: 300px; border-radius: 10px; }
+  button { margin: 5px; padding: 10px; background: red; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; }
+  button:hover { background: darkred; }
+</style>
+</head>
+<body>
+
+  <h1 id="movie-title">Select Theatre & Time</h1>
+
+  <div class="theatre">
+    <h3>PVR Cinemas</h3>
+    <button onclick="selectShow('PVR','10AM')">10 AM</button>
+    <button onclick="selectShow('PVR','3PM')">3 PM</button>
+  </div>
+
+  <div class="theatre">
+    <h3>INOX</h3>
+    <button onclick="selectShow('INOX','12PM')">12 PM</button>
+    <button onclick="selectShow('INOX','6PM')">6 PM</button>
+  </div>
+
+  <div class="theatre">
+    <h3>Cinepolis</h3>
+    <button onclick="selectShow('Cinepolis','2PM')">2 PM</button>
+    <button onclick="selectShow('Cinepolis','9PM')">9 PM</button>
+  </div>
+
+  <script>
+    const movie = localStorage.getItem('movie') || "Movie";
+    document.getElementById('movie-title').innerText = movie + " - Select Theatre";
+
+    function selectShow(theatre, time){
+      localStorage.setItem('theatre', theatre);
+      localStorage.setItem('time', time);
+      window.location.href = 'seats.html';
+    }
+  </script>
+
+</body>
+</html>
